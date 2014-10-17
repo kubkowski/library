@@ -6,17 +6,46 @@
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 </head>
 <body>
-	
 
-
-	<div class="container-fluid">
-
+	<div class="container">
+		<h1>Authors:</h1>
+		<hr />
+		<div class="page">
+			
+		</div>
 	</div>
 
 	
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>	
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>	
+	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript">
+		
+		var AuthorList = Backbone.View.extend({
+			el: '.page',
+			render: function(){
+				this.$el.html("CONTENT!");
+			}
+		});
+
+		var authorList = new AuthorList();
+
+		var Router = Backbone.Router.extend({
+			routes: {
+				'authors': 'authors'
+			}
+		});
+
+		var router = new Router();
+		router.on('route:authors', function(){
+			authorList.render();
+		});
+
+		Backbone.history.start();
+
+	</script>
 		
 </body>
 </html>
