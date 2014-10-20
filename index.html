@@ -15,22 +15,50 @@
 		</div>
 	</div>
 
+	<script type="text/template" id="author-list-template">
+		<table class="table striped">
+			<thead>
+				<th>First name</th>
+				<th>Last name</th>
+				<th></th>
+			</thead>
+			<tbody>
+				<% _.each(authors, function(author) { %>
+					<tr>
+						<td><%= author.get('first_name') %></td>
+						<td><%= author.get('last_name') %></td>
+						<td></td>
+					</tr>
+				<% }); %>
+			</tbody>
+		</table>
+	</script>
+	
+	
+
+	
 	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="/app/models/author.js"></script>
+	<script src="/app/collections/authors.js"></script>
 
 	<script type="text/javascript">
 		
-		var AuthorList = Backbone.View.extend({
-			el: '.page',
-			render: function(){
-				this.$el.html("CONTENT!");
-			}
+		//Ajax Prefilter
+		$.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
+  		options.url = 'https://safe-dusk-6297.herokuapp.com/api' + options.url;
 		});
 
-		var authorList = new AuthorList();
+		var AuthorList = Backbone.View.extend({
+			el: '.page',
+			template: _.template($('#author-list-template').html()),
+			render: function(){
+				//this.$el.html(this.template(this.model.toJSON()));				
+			}
+		});
 
 		var Router = Backbone.Router.extend({
 			routes: {
@@ -40,7 +68,15 @@
 
 		var router = new Router();
 		router.on('route:authors', function(){
-			authorList.render();
+			var that = this;
+			this.authors = new Authors();
+			this.authorList = new AuthorList();
+			this.authorList.authors = this.authors;
+			var data = this.authors.fetch();
+			data.success( function() {
+        that.authorList.render();
+        console.log(that.authorList);
+      });
 		});
 
 		Backbone.history.start();
