@@ -19,6 +19,11 @@
 	<%= last_name %>
 	</script>
 
+	<script id="publisher-list-item" type="text/template">
+	<%= name %>
+	<%= established_year %>
+	</script>
+
 	
 	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -26,7 +31,11 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="/app/models/author.js"></script>
+	<script src="/app/models/publisher.js"></script>
 	<script src="/app/collections/authors.js"></script>
+	<script src="/app/collections/publishers.js"></script>
+	<script src="/app/views/authors.js"></script>
+	<script src="/app/views/publishers.js"></script>
 
 	<script type="text/javascript">
 		
@@ -35,35 +44,12 @@
   		options.url = 'https://safe-dusk-6297.herokuapp.com/api' + options.url;
 		});
 
-		window.AuthorsItemView = Backbone.View.extend({
-			tagName: "div",
-			template: _.template($("#author-list-item").html()),
-			render: function() {
-        this.$el.html(this.template(this.model.toJSON()));
-        console.log(this.model.toJSON());
-        return this;
-       }
-		});
-
-		window.AuthorsListView = Backbone.View.extend({
-			el: '.page',
-			render: function(){
-				var self = this;
-				console.log(self.authors.models);
-          _.each(self.authors.models, function(author) {
-          	console.log(author);
-            self.$el.append(new AuthorsItemView({model: author}).render().el);
-          });
-			}
-		});
-
-
-
 		var Router = Backbone.Router.extend({
 			routes: {
-				'authors': 'authorsList'
+				'authors': 'authorsList',
+				'publishers' : 'publishersList'
 			},
-			authorsList: function (){
+			authorsList: function(){
 				var self = this;
 				this.authors = new Authors();
 				this.authorsListView = new AuthorsListView();
@@ -71,12 +57,19 @@
 				this.authors.fetch().success(function() {
         	self.authorsListView.render();
       	});
+			},
+			publishersList: function(){
+				var self = this;
+				this.publishers = new Publishers();
+				this.publishersListView = new PublishersListView();
+				this.publishersListView.publishers = this.publishers;
+				this.publishers.fetch().success(function(){
+					self.publishersListView.render();
+				});
 			}
 		});
 
 		var router = new Router();
-
-
 		Backbone.history.start();
 
 	</script>
