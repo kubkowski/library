@@ -1,4 +1,4 @@
-		var Authors = Backbone.Collection.extend({
+window.Authors = Backbone.Collection.extend({
 			url: '/authors',
 			model: Author
 		});
