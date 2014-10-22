@@ -1,6 +1,6 @@
 window.AuthorsItemView = Backbone.View.extend({
-	tagName: "div",
-	template: _.template($("#author-list-item").html()),
+	tagName: "tr",
+	template: _.template($("#authors-list-item").html()),
 	render: function() {
       this.$el.html(this.template(this.model.toJSON()));
       return this;

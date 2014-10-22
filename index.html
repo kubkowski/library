@@ -8,21 +8,36 @@
 <body>
 
 	<div class="container">
-		<h1>Authors:</h1>
+		<a href="#/">New user</a> <!-- To do: finish adding new author -->
+		<h1>Authors</h1>
 		<hr />
-		<div class="page">
-			
-		</div>
+		<table class="table striped">
+			<thead>
+				<tr>
+					<th>First name</th>
+					<th>Last name</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody class="page">							
+
+			</tbody>
+		</table>
+
 	</div>
-	<script id="author-list-item" type="text/template">
-	<%= first_name %>
-	<%= last_name %>
+	
+	<script id="authors-list-item" type="text/template">	
+		<td><%= htmlEncode(first_name) %></td>
+		<td><%= htmlEncode(last_name) %></td>
+		<td></td>
 	</script>
 
-	<script id="publisher-list-item" type="text/template">
-	<%= name %>
-	<%= established_year %>
+	<script id="publishers-list-item" type="text/template">
+		<td><%= htmlEncode(name) %></td>
+		<td><%= htmlEncode(established_year) %></td>
+		<td></td>
 	</script>
+
 
 	
 	
@@ -38,6 +53,15 @@
 	<script src="/app/views/publishers.js"></script>
 
 	<script type="text/javascript">
+
+		// XSS Protection
+		function htmlEncode(value){
+  		return $('<div/>').text(value).html();
+		}
+
+		function htmlDecode(value){
+  		return $('<div/>').html(value).text();
+		}
 		
 		//Ajax Prefilter
 		$.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
@@ -51,6 +75,7 @@
 			},
 			authorsList: function(){
 				var self = this;
+				$(".page").empty();
 				this.authors = new Authors();
 				this.authorsListView = new AuthorsListView();
 				this.authorsListView.authors = this.authors;
@@ -60,6 +85,7 @@
 			},
 			publishersList: function(){
 				var self = this;
+				$(".page").empty();
 				this.publishers = new Publishers();
 				this.publishersListView = new PublishersListView();
 				this.publishersListView.publishers = this.publishers;
