@@ -1,5 +1,5 @@
 window.Author = Backbone.Model.extend({
-//	rootUrl: '/authors',
+	url: '/authors',
 	defaults: {
 		first_name: "",
 		last_name: ""

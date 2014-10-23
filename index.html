@@ -8,8 +8,13 @@
 <body>
 
 	<div class="container">
-		<a href="#/">New user</a> <!-- To do: finish adding new author -->
+
+
+	</div>
+
+	<script id='authors-list' type='text/template'>
 		<h1>Authors</h1>
+		<a href="#/newauthor" class="btn btn-primary">New author</a>
 		<hr />
 		<table class="table striped">
 			<thead>
@@ -23,8 +28,7 @@
 
 			</tbody>
 		</table>
-
-	</div>
+	</script>
 	
 	<script id="authors-list-item" type="text/template">	
 		<td><%= htmlEncode(first_name) %></td>
@@ -38,7 +42,21 @@
 		<td></td>
 	</script>
 
+	<script id='edit-author' type='text/template'>
+		<h1>Authors</h1>
+		<hr />
+		<form action="" class="edit-author-form">
+			<legend>Create Author:</legend>
+			<label>First name:</label>
+			<input type="text" name="first_name" />
+			<label>Last name:</label>
+			<input type="text" name="last_name" />
+			<hr />
+			<button type="submit" class="btn">Create Author</button>
+		</form>
+	</script>
 
+	
 	
 	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -51,37 +69,56 @@
 	<script src="/app/collections/publishers.js"></script>
 	<script src="/app/views/authors.js"></script>
 	<script src="/app/views/publishers.js"></script>
+	<script src="/app/helpers/applicationhelper.js"></script>
 
 	<script type="text/javascript">
 
-		// XSS Protection
-		function htmlEncode(value){
-  		return $('<div/>').text(value).html();
-		}
+		window.EditAuthorView = Backbone.View.extend({
+			el: '.container',
+			render: function(){
+				var template = _.template($('#edit-author').html());
+				this.$el.html(template);
+			},
+			events: {
+				'submit .edit-author-form': 'saveAuthor'
+			},
+			saveAuthor: function(ev){
+				var authorDetails = $(ev.currentTarget).serializeObject();
+				var author = new Author();
+				author.save(authorDetails, {
+				success: function(author){
+						router.navigate('', {trigger:true});
+					}
+				});
+				console.log(authorDetails);
+				return false;
+			}
+		})
 
-		function htmlDecode(value){
-  		return $('<div/>').html(value).text();
-		}
-		
-		//Ajax Prefilter
-		$.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
-  		options.url = 'https://safe-dusk-6297.herokuapp.com/api' + options.url;
-		});
-
-		var Router = Backbone.Router.extend({
+		window.Router = Backbone.Router.extend({
 			routes: {
+				'': 'authorsList',
 				'authors': 'authorsList',
+				'newauthor': 'editAuthor',
 				'publishers' : 'publishersList'
 			},
 			authorsList: function(){
 				var self = this;
-				$(".page").empty();
+				var template = _.template($('#authors-list').html());
+				$('.container').empty();
+				$('.container').html(template);
 				this.authors = new Authors();
 				this.authorsListView = new AuthorsListView();
 				this.authorsListView.authors = this.authors;
 				this.authors.fetch().success(function() {
         	self.authorsListView.render();
       	});
+			},
+			editAuthor: function(){
+				var self = this;
+				$(".container").empty();
+				this.editAuthorView = new EditAuthorView();
+				this.editAuthorView.render();
 			},
 			publishersList: function(){
 				var self = this;
