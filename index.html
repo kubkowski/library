@@ -14,7 +14,7 @@
 
 	<script id='authors-list' type='text/template'>
 		<h1>Authors</h1>
-		<a href="#/newauthor" class="btn btn-primary">New author</a>
+		<a href="#/authors/new" class="btn btn-primary">New author</a>
 		<hr />
 		<table class="table striped">
 			<thead>
@@ -31,14 +31,14 @@
 	</script>
 	
 	<script id="authors-list-item" type="text/template">	
-		<td><%= htmlEncode(first_name) %></td>
-		<td><%= htmlEncode(last_name) %></td>
-		<td></td>
+		<td><%= htmlEncode(firstName) %></td>
+		<td><%= htmlEncode(lastName) %></td>
+		<td><a href="#/authors/edit/<%= id %>" class="btn btn-primary">Edit Author</a></td>
 	</script>
 
 	<script id="publishers-list-item" type="text/template">
 		<td><%= htmlEncode(name) %></td>
-		<td><%= htmlEncode(established_year) %></td>
+		<td><%= htmlEncode(establishedYear) %></td>
 		<td></td>
 	</script>
 
@@ -46,11 +46,12 @@
 		<h1>Authors</h1>
 		<hr />
 		<form action="" class="edit-author-form">
-			<legend>Create Author:</legend>
+			<legend><%= id ? 'Update' : 'Create'%> author:</legend>
 			<label>First name:</label>
-			<input type="text" name="first_name" />
+			<input type="text" name="first_name" value="<%= id ? firstName : '' %>" />
 			<label>Last name:</label>
-			<input type="text" name="last_name" />
+			<input type="text" name="last_name" value="<%= id ? lastName : '' %>" />
+			<input type="hidden" name="id" value="<%= id %>"
 			<hr />
 			<button type="submit" class="btn">Create Author</button>
 		</form>
@@ -75,9 +76,10 @@
 
 		window.EditAuthorView = Backbone.View.extend({
 			el: '.container',
+			template: _.template($('#edit-author').html()),
 			render: function(){
-				var template = _.template($('#edit-author').html());
-				this.$el.html(template);
+					this.$el.html(this.template(this.model.toJSON()));
+					//return this;
 			},
 			events: {
 				'submit .edit-author-form': 'saveAuthor'
@@ -85,6 +87,8 @@
 			saveAuthor: function(ev){
 				var authorDetails = $(ev.currentTarget).serializeObject();
 				var author = new Author();
+				console.log(author);
+				console.log(authorDetails);
 				author.save(authorDetails, {
 				success: function(author){
 						router.navigate('', {trigger:true});
@@ -99,7 +103,8 @@
 			routes: {
 				'': 'authorsList',
 				'authors': 'authorsList',
-				'newauthor': 'editAuthor',
+				'authors/new': 'newAuthor',
+				'authors/edit/:id': 'editAuthor',
 				'publishers' : 'publishersList'
 			},
 			authorsList: function(){
@@ -114,11 +119,23 @@
         	self.authorsListView.render();
       	});
 			},
-			editAuthor: function(){
+			newAuthor: function() {
 				var self = this;
+				console.log(this);
+				$(".container").empty();
+			},
+			editAuthor: function(id){
+				var self = this;
+				console.log(this);
 				$(".container").empty();
 				this.editAuthorView = new EditAuthorView();
-				this.editAuthorView.render();
+				this.author = new Author({id: id});
+				this.editAuthorView.model = this.author;
+				this.author.fetch().success(function(author) {
+        	self.editAuthorView.render();
+      	});
+
+				
 			},
 			publishersList: function(){
 				var self = this;
