@@ -7,10 +7,7 @@
 </head>
 <body>
 
-	<div class="container">
-
-
-	</div>
+	<div class="container"></div>
 
 	<script id='authors-list' type='text/template'>
 		<h1>Authors</h1>
@@ -31,11 +28,11 @@
 	</script>
 	
 	<script id="authors-list-item" type="text/template">	
-		<td><%= htmlEncode(firstName) %></td>
-		<td><%= htmlEncode(lastName) %></td>
+		<td><%= htmlEncode(first_name) %></td>
+		<td><%= htmlEncode(last_name) %></td>
 		<td><a href="#/authors/edit/<%= id %>" class="btn btn-primary">Edit Author</a></td>
 	</script>
-
+<!--
 	<script id="publishers-list-item" type="text/template">
 		<td><%= htmlEncode(name) %></td>
 		<td><%= htmlEncode(establishedYear) %></td>
@@ -48,16 +45,16 @@
 		<form action="" class="edit-author-form">
 			<legend><%= id ? 'Update' : 'Create'%> author:</legend>
 			<label>First name:</label>
-			<input type="text" name="first_name" value="<%= id ? firstName : '' %>" />
+			<input type="text" name="first_name" value="<%= id ? first_name : '' %>" />
 			<label>Last name:</label>
-			<input type="text" name="last_name" value="<%= id ? lastName : '' %>" />
+			<input type="text" name="last_name" value="<%= id ? last_name : '' %>" />
 			<input type="hidden" name="id" value="<%= id %>"
 			<hr />
 			<button type="submit" class="btn">Create Author</button>
 		</form>
 	</script>
 
-	
+-->	
 	
 	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -65,48 +62,32 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="/app/models/author.js"></script>
-	<script src="/app/models/publisher.js"></script>
-	<script src="/app/collections/authors.js"></script>
-	<script src="/app/collections/publishers.js"></script>
-	<script src="/app/views/authors.js"></script>
-	<script src="/app/views/publishers.js"></script>
-	<script src="/app/helpers/applicationhelper.js"></script>
 
+	<script src="/app/collections/authors.js"></script>
+	
+	<script src="/app/helpers/applicationhelper.js"></script>
+<!--
+	<script src="/app/models/publisher.js"></script>
+	<script src="/app/collections/publishers.js"></script>
+	<script src="/app/views/publishers.js"></script>
+	<script src="/app/views/authors.js"></script>
+-->
 	<script type="text/javascript">
 
-		window.EditAuthorView = Backbone.View.extend({
-			el: '.container',
-			template: _.template($('#edit-author').html()),
-			render: function(){
-					this.$el.html(this.template(this.model.toJSON()));
-					//return this;
-			},
-			events: {
-				'submit .edit-author-form': 'saveAuthor'
-			},
-			saveAuthor: function(ev){
-				var authorDetails = $(ev.currentTarget).serializeObject();
-				var author = new Author();
-				console.log(author);
-				console.log(authorDetails);
-				author.save(authorDetails, {
-				success: function(author){
-						router.navigate('', {trigger:true});
-					}
-				});
-				console.log(authorDetails);
-				return false;
-			}
-		})
+		UserList = Backbone.View.extend({
 
-		window.Router = Backbone.Router.extend({
+		});
+
+		Router = Backbone.Router.extend({
 			routes: {
 				'': 'authorsList',
 				'authors': 'authorsList',
-				'authors/new': 'newAuthor',
-				'authors/edit/:id': 'editAuthor',
-				'publishers' : 'publishersList'
+//				'authors/new': 'newAuthor',
+//				'authors/edit/:id': 'editAuthor',
+//				'publishers' : 'publishersList'
 			},
+
+/*
 			authorsList: function(){
 				var self = this;
 				var template = _.template($('#authors-list').html());
@@ -119,11 +100,13 @@
         	self.authorsListView.render();
       	});
 			},
+
 			newAuthor: function() {
 				var self = this;
 				console.log(this);
 				$(".container").empty();
 			},
+
 			editAuthor: function(id){
 				var self = this;
 				console.log(this);
@@ -133,9 +116,7 @@
 				this.editAuthorView.model = this.author;
 				this.author.fetch().success(function(author) {
         	self.editAuthorView.render();
-      	});
-
-				
+      	});				
 			},
 			publishersList: function(){
 				var self = this;
@@ -147,9 +128,18 @@
 					self.publishersListView.render();
 				});
 			}
+
+*/			
 		});
 
 		var router = new Router();
+
+		router.on('route:authorsList', function(){
+			console.log('Home page loaded')
+		})
+
+
+
 		Backbone.history.start();
 
 	</script>
