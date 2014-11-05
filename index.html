@@ -9,7 +9,7 @@
 
 	<div class="container"></div>
 
-	<script id='authors-list' type='text/template'>
+
 		<h1>Authors</h1>
 		<a href="#/authors/new" class="btn btn-primary">New author</a>
 		<hr />
@@ -25,7 +25,7 @@
 
 			</tbody>
 		</table>
-	</script>
+
 	
 	<script id="authors-list-item" type="text/template">	
 		<td><%= htmlEncode(first_name) %></td>
@@ -74,8 +74,31 @@
 -->
 	<script type="text/javascript">
 
-		UserList = Backbone.View.extend({
+		AuthorsItemView = Backbone.View.extend({
+			tagName: "tr",
+			template: _.template($("#authors-list-item").html()),
+			render: function() {
+      	this.$el.html(this.template(this.model.toJSON()));
+      	return this;
+     	}
+		});	
 
+		UserList = Backbone.View.extend({
+			el: '.page',
+			initialize: function(){
+
+			},
+			render: function(){
+				var authors = new Authors();
+				var self = this;
+				authors.fetch({
+					success: function(authors){
+						_.each(authors.models, function(author){
+							self.$el.append(new AuthorsItemView({model: author}).render().el)
+						});
+					}
+				});
+			}
 		});
 
 		Router = Backbone.Router.extend({
@@ -135,7 +158,8 @@
 		var router = new Router();
 
 		router.on('route:authorsList', function(){
-			console.log('Home page loaded')
+			userList = new UserList();
+			userList.render();
 		})
 
 
