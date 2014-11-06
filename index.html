@@ -7,7 +7,7 @@
 </head>
 <body>
 
-	<div class="container"></div>
+	<div class="container">
 
 
 		<h1>Authors</h1>
@@ -26,7 +26,8 @@
 			</tbody>
 		</table>
 
-	
+	</div>
+
 	<script id="authors-list-item" type="text/template">	
 		<td><%= htmlEncode(first_name) %></td>
 		<td><%= htmlEncode(last_name) %></td>
@@ -38,23 +39,23 @@
 		<td><%= htmlEncode(establishedYear) %></td>
 		<td></td>
 	</script>
+-->	
 
 	<script id='edit-author' type='text/template'>
 		<h1>Authors</h1>
 		<hr />
-		<form action="" class="edit-author-form">
-			<legend><%= id ? 'Update' : 'Create'%> author:</legend>
+		<form class="edit-author-form">
+			<legend>Create author:</legend>
 			<label>First name:</label>
-			<input type="text" name="first_name" value="<%= id ? first_name : '' %>" />
+			<input type="text" name="first_name" value="" />
 			<label>Last name:</label>
-			<input type="text" name="last_name" value="<%= id ? last_name : '' %>" />
-			<input type="hidden" name="id" value="<%= id %>"
+			<input type="text" name="last_name" value="" />
 			<hr />
 			<button type="submit" class="btn">Create Author</button>
 		</form>
 	</script>
 
--->	
+
 	
 	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -75,7 +76,7 @@
 	<script type="text/javascript">
 
 		AuthorsItemView = Backbone.View.extend({
-			tagName: "tr",
+			tagName: 'tr',
 			template: _.template($("#authors-list-item").html()),
 			render: function() {
       	this.$el.html(this.template(this.model.toJSON()));
@@ -83,11 +84,8 @@
      	}
 		});	
 
-		UserList = Backbone.View.extend({
+		AuthorList = Backbone.View.extend({
 			el: '.page',
-			initialize: function(){
-
-			},
 			render: function(){
 				var authors = new Authors();
 				var self = this;
@@ -101,66 +99,56 @@
 			}
 		});
 
+		EditAuthor = Backbone.View.extend({
+			el: '.container',
+			template: _.template($('#edit-author').html()),
+			render: function(){
+				this.$el.empty();
+				this.$el.html(this.template);
+			},
+			events: {
+				'submit .edit-author-form': 'saveAuthor'
+			},
+			saveAuthor: function(ev){
+				var authorDetails = $(ev.currentTarget).serializeObject();
+				var author = new Author();
+				console.log(author);
+				console.log(authorDetails);
+				author.save(authorDetails, {
+				success: function(){
+						console.log(author);
+						router.navigate('', {trigger:true});
+					}
+				});
+				return false;
+			}
+		});
+
 		Router = Backbone.Router.extend({
 			routes: {
 				'': 'authorsList',
 				'authors': 'authorsList',
-//				'authors/new': 'newAuthor',
+				'authors/new': 'editAuthor',
 //				'authors/edit/:id': 'editAuthor',
 //				'publishers' : 'publishersList'
 			},
-
-/*
-			authorsList: function(){
-				var self = this;
-				var template = _.template($('#authors-list').html());
-				$('.container').empty();
-				$('.container').html(template);
-				this.authors = new Authors();
-				this.authorsListView = new AuthorsListView();
-				this.authorsListView.authors = this.authors;
-				this.authors.fetch().success(function() {
-        	self.authorsListView.render();
-      	});
-			},
-
-			newAuthor: function() {
-				var self = this;
-				console.log(this);
-				$(".container").empty();
-			},
-
-			editAuthor: function(id){
-				var self = this;
-				console.log(this);
-				$(".container").empty();
-				this.editAuthorView = new EditAuthorView();
-				this.author = new Author({id: id});
-				this.editAuthorView.model = this.author;
-				this.author.fetch().success(function(author) {
-        	self.editAuthorView.render();
-      	});				
-			},
-			publishersList: function(){
-				var self = this;
-				$(".page").empty();
-				this.publishers = new Publishers();
-				this.publishersListView = new PublishersListView();
-				this.publishersListView.publishers = this.publishers;
-				this.publishers.fetch().success(function(){
-					self.publishersListView.render();
-				});
-			}
-
-*/			
+		
 		});
+
+		
+		
 
 		var router = new Router();
 
-		router.on('route:authorsList', function(){
-			userList = new UserList();
-			userList.render();
-		})
+		router.on('route:authorsList', function(){			
+			var authorList = new AuthorList();
+			authorList.render();
+		});
+
+		router.on('route:editAuthor', function(){
+			var editAuthor = new EditAuthor();
+			editAuthor.render();
+		});
 
 
 
