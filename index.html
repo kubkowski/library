@@ -9,7 +9,7 @@
 
 	<div class="container">
 
-
+	<script id="author-list" type="text/template">
 		<h1>Authors</h1>
 		<a href="#/authors/new" class="btn btn-primary">New author</a>
 		<hr />
@@ -25,6 +25,8 @@
 
 			</tbody>
 		</table>
+
+	</script>
 
 	</div>
 
@@ -87,17 +89,25 @@
 		AuthorList = Backbone.View.extend({
 			el: '.page',
 			render: function(){
-				var authors = new Authors();
 				var self = this;
+				var authors = new Authors();
 				authors.fetch({
 					success: function(authors){
-						_.each(authors.models, function(author){
-							self.$el.append(new AuthorsItemView({model: author}).render().el)
-						});
+							_.each(authors.models, function(author){
+								self.$el.append(new AuthorsItemView({model: author}).render().el)
+							});
 					}
-				});
+				});				
 			}
 		});
+
+		Header = Backbone.View.extend({
+			el: '.container',
+			template: _.template($("#author-list").html()),
+			render:function(){
+				this.$el.empty().html(this.template);
+			}
+		})
 
 		EditAuthor = Backbone.View.extend({
 			el: '.container',
@@ -116,7 +126,7 @@
 				console.log(authorDetails);
 				author.save(authorDetails, {
 				success: function(){
-						console.log(author);
+						console.log(router);
 						router.navigate('', {trigger:true});
 					}
 				});
@@ -141,6 +151,8 @@
 		var router = new Router();
 
 		router.on('route:authorsList', function(){			
+			var header = new Header();
+			header.render();
 			var authorList = new AuthorList();
 			authorList.render();
 		});
