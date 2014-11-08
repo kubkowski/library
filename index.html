@@ -7,7 +7,7 @@
 </head>
 <body>
 
-	<div class="container">
+	<div class="container"></div>
 
 	<script id="author-list" type="text/template">
 		<h1>Authors</h1>
@@ -25,10 +25,7 @@
 
 			</tbody>
 		</table>
-
 	</script>
-
-	</div>
 
 	<script id="authors-list-item" type="text/template">	
 		<td><%= htmlEncode(first_name) %></td>
@@ -42,18 +39,22 @@
 		<td></td>
 	</script>
 -->	
-
+	
 	<script id='edit-author' type='text/template'>
 		<h1>Authors</h1>
 		<hr />
 		<form class="edit-author-form">
-			<legend>Create author:</legend>
+			<legend><%= author ? 'Update' : 'Create' %> author:</legend>
 			<label>First name:</label>
-			<input type="text" name="first_name" value="" />
+			<input type="text" name="first_name" value="<%= author ? author.get('first_name') : '' %>" />
 			<label>Last name:</label>
-			<input type="text" name="last_name" value="" />
+			<input type="text" name="last_name" value="<%= author ? author.get('last_name') : '' %>" />
 			<hr />
-			<button type="submit" class="btn">Create Author</button>
+			<button type="submit" class="btn"><%= author ? 'Update' : 'Create' %></button>
+			<% if (author) { %>
+				<input type="hidden" name="id" value="<%= author.id %>" />
+				<button type= "button" class="btn btn-danger delete">Delete</button>
+			<% } %>
 		</form>
 	</script>
 
@@ -105,28 +106,44 @@
 			el: '.container',
 			template: _.template($("#author-list").html()),
 			render:function(){
-				this.$el.empty().html(this.template);
+				this.$el.html(this.template);
 			}
 		})
 
 		EditAuthor = Backbone.View.extend({
 			el: '.container',
 			template: _.template($('#edit-author').html()),
-			render: function(){
-				this.$el.empty();
-				this.$el.html(this.template);
+			render: function(options){
+				var self = this;
+				if (options.id) {
+					self.author = new Author({id: options.id});
+					self.author.fetch({
+						success: function(author){
+							self.$el.html(self.template({author: author}));
+						}
+					});
+				} else {
+					this.$el.html(this.template({author: null}));
+				}
+				
 			},
 			events: {
-				'submit .edit-author-form': 'saveAuthor'
+				'submit .edit-author-form': 'saveAuthor',
+				'click .delete' : 'deleteAuthor'
 			},
 			saveAuthor: function(ev){
 				var authorDetails = $(ev.currentTarget).serializeObject();
 				var author = new Author();
-				console.log(author);
-				console.log(authorDetails);
 				author.save(authorDetails, {
 				success: function(){
-						console.log(router);
+						router.navigate('', {trigger:true});
+					}
+				});
+				return false;
+			},
+			deleteAuthor: function(ev){
+				this.author.destroy({
+					success: function(){
 						router.navigate('', {trigger:true});
 					}
 				});
@@ -139,7 +156,7 @@
 				'': 'authorsList',
 				'authors': 'authorsList',
 				'authors/new': 'editAuthor',
-//				'authors/edit/:id': 'editAuthor',
+				'authors/edit/:id': 'editAuthor',
 //				'publishers' : 'publishersList'
 			},
 		
@@ -157,9 +174,9 @@
 			authorList.render();
 		});
 
-		router.on('route:editAuthor', function(){
+		router.on('route:editAuthor', function(id){
 			var editAuthor = new EditAuthor();
-			editAuthor.render();
+			editAuthor.render({id: id});
 		});
 
 
