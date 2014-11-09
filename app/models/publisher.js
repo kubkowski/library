@@ -1,7 +1,7 @@
-window.Publisher = Backbone.Model.extend({
-	urlRoot: '/publishers/',
+Publisher = Backbone.Model.extend({
+	urlRoot: '/publishers',
 	defaults: {
 		name: "",
-		establishedYear: 1900
+		established_year: 1900
 	}
 })

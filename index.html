@@ -9,7 +9,7 @@
 
 	<div class="container"></div>
 
-	<script id="author-list" type="text/template">
+	<script id="authors-list" type="text/template">
 		<h1>Authors</h1>
 		<a href="#/authors/new" class="btn btn-primary">New author</a>
 		<hr />
@@ -32,14 +32,7 @@
 		<td><%= htmlEncode(last_name) %></td>
 		<td><a href="#/authors/edit/<%= id %>" class="btn btn-primary">Edit Author</a></td>
 	</script>
-<!--
-	<script id="publishers-list-item" type="text/template">
-		<td><%= htmlEncode(name) %></td>
-		<td><%= htmlEncode(establishedYear) %></td>
-		<td></td>
-	</script>
--->	
-	
+
 	<script id='edit-author' type='text/template'>
 		<h1>Authors</h1>
 		<hr />
@@ -58,98 +51,63 @@
 		</form>
 	</script>
 
+	<script id="publishers-list" type="text/template">
+		<h1>Publishers</h1>
+		<a href="#/publishers/new" class="btn btn-primary">New publisher</a>
+		<hr />
+		<table class="table striped">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Established in</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody class="page">							
 
-	
+			</tbody>
+		</table>
+	</script>
+
+	<script id="publishers-list-item" type="text/template">
+		<td><%= htmlEncode(name) %></td>
+		<td><%= htmlEncode(established_year) %></td>
+		<td><a href="#/publishers/edit/<%= id %>" class="btn btn-primary">Edit Publisher</a></td>
+	</script>
+
+	<script id='edit-publisher' type='text/template'>
+		<h1>Publishers</h1>
+		<hr />
+		<form class="edit-publisher-form">
+			<legend><%= publisher ? 'Update' : 'Create' %> publisher:</legend>
+			<label>Name</label>
+			<input type="text" name="name" value="<%= publisher ? publisher.get('name') : '' %>" />
+			<label>Established in:</label>
+			<input type="text" name="established_year" value="<%= publisher ? publisher.get('established_year') : '' %>" />
+			<hr />
+			<button type="submit" class="btn"><%= publisher ? 'Update' : 'Create' %></button>
+			<% if (publisher) { %>
+				<input type="hidden" name="id" value="<%= publisher.id %>" />
+				<button type= "button" class="btn btn-danger delete">Delete</button>
+			<% } %>
+		</form>
+	</script>
+
+		
 	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="/app/models/author.js"></script>
-
-	<script src="/app/collections/authors.js"></script>
-	
-	<script src="/app/helpers/applicationhelper.js"></script>
-<!--
 	<script src="/app/models/publisher.js"></script>
+	<script src="/app/collections/authors.js"></script>
 	<script src="/app/collections/publishers.js"></script>
-	<script src="/app/views/publishers.js"></script>
+	<script src="/app/helpers/applicationhelper.js"></script>
 	<script src="/app/views/authors.js"></script>
--->
+	<script src="/app/views/publishers.js"></script>
+
 	<script type="text/javascript">
-
-		AuthorsItemView = Backbone.View.extend({
-			tagName: 'tr',
-			template: _.template($("#authors-list-item").html()),
-			render: function() {
-      	this.$el.html(this.template(this.model.toJSON()));
-      	return this;
-     	}
-		});	
-
-		AuthorList = Backbone.View.extend({
-			el: '.page',
-			render: function(){
-				var self = this;
-				var authors = new Authors();
-				authors.fetch({
-					success: function(authors){
-							_.each(authors.models, function(author){
-								self.$el.append(new AuthorsItemView({model: author}).render().el)
-							});
-					}
-				});				
-			}
-		});
-
-		Header = Backbone.View.extend({
-			el: '.container',
-			template: _.template($("#author-list").html()),
-			render:function(){
-				this.$el.html(this.template);
-			}
-		})
-
-		EditAuthor = Backbone.View.extend({
-			el: '.container',
-			template: _.template($('#edit-author').html()),
-			render: function(options){
-				var self = this;
-				if (options.id) {
-					self.author = new Author({id: options.id});
-					self.author.fetch({
-						success: function(author){
-							self.$el.html(self.template({author: author}));
-						}
-					});
-				} else {
-					this.$el.html(this.template({author: null}));
-				}
-				
-			},
-			events: {
-				'submit .edit-author-form': 'saveAuthor',
-				'click .delete' : 'deleteAuthor'
-			},
-			saveAuthor: function(ev){
-				var authorDetails = $(ev.currentTarget).serializeObject();
-				var author = new Author();
-				author.save(authorDetails, {
-				success: function(){
-						router.navigate('', {trigger:true});
-					}
-				});
-				return false;
-			},
-			deleteAuthor: function(ev){
-				this.author.destroy({
-					success: function(){
-						router.navigate('', {trigger:true});
-					}
-				});
-				return false;
-			}
-		});
 
 		Router = Backbone.Router.extend({
 			routes: {
@@ -157,21 +115,20 @@
 				'authors': 'authorsList',
 				'authors/new': 'editAuthor',
 				'authors/edit/:id': 'editAuthor',
-//				'publishers' : 'publishersList'
-			},
+				'publishers' : 'publishersList',
+				'publishers/new': 'editPublisher',
+				'publishers/edit/:id': 'editPublisher'
+			}
 		
 		});
-
-		
-		
 
 		var router = new Router();
 
 		router.on('route:authorsList', function(){			
-			var header = new Header();
+			var header = new AuthorsListHeader();
 			header.render();
-			var authorList = new AuthorList();
-			authorList.render();
+			var authorsList = new AuthorsList();
+			authorsList.render();
 		});
 
 		router.on('route:editAuthor', function(id){
@@ -179,7 +136,18 @@
 			editAuthor.render({id: id});
 		});
 
+		router.on('route:publishersList', function(){
+			var header = new PublishersListHeader();
+			header.render();
+			var publishersList = new PublishersList();
+			publishersList.render();
+		});
 
+		router.on('route:editPublisher', function(id){
+			console.log('ok');
+			var editPublisher = new EditPublisher();
+			editPublisher.render({id: id});
+		});
 
 		Backbone.history.start();
 
