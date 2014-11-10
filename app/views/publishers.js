@@ -25,9 +25,9 @@ PublishersItemView = Backbone.View.extend({
 	tagName: 'tr',
 	template: _.template($("#publishers-list-item").html()),
 	render: function() {
-     this.$el.html(this.template(this.model.toJSON()));
-     return this;
-    }
+    this.$el.html(this.template(this.model.toJSON()));
+    return this;
+  }
 });
 
 EditPublisher = Backbone.View.extend({

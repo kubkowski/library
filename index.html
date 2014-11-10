@@ -93,6 +93,36 @@
 		</form>
 	</script>
 
+	<script id="books-list" type="text/template">
+		<h1>Books</h1>
+		<a href="#/books/new" class="btn btn-primary">New book</a>
+		<hr />
+		<table class="table striped">
+			<thead>
+				<tr>
+					<th>Author</th>
+					<th>Title</th>
+					<th>ISBN</th>
+					<th>Publisher</th>
+					<th>Year</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody class="page">							
+
+			</tbody>
+		</table>
+	</script>
+
+	<script id="books-list-item" type="text/template">
+		<td><%= htmlEncode(author.first_name + " " + author.last_name) %></td>
+		<td><%= htmlEncode(title) %></td>
+		<td><%= htmlEncode(ISBN) %></td>
+		<td><%= htmlEncode(publisher.name) %></td>
+		<td><%= htmlEncode(published_year) %></td>
+		<td><a href="#/books/edit/<%= id %>" class="btn btn-primary">Edit Publisher</a></td>
+	</script>
+
 		
 	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -100,11 +130,14 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="/app/models/author.js"></script>
+	<script src="/app/models/book.js"></script>
 	<script src="/app/models/publisher.js"></script>
 	<script src="/app/collections/authors.js"></script>
+	<script src="/app/collections/books.js"></script>
 	<script src="/app/collections/publishers.js"></script>
 	<script src="/app/helpers/applicationhelper.js"></script>
 	<script src="/app/views/authors.js"></script>
+	<script src="/app/views/books.js"></script>
 	<script src="/app/views/publishers.js"></script>
 
 	<script type="text/javascript">
@@ -117,7 +150,8 @@
 				'authors/edit/:id': 'editAuthor',
 				'publishers' : 'publishersList',
 				'publishers/new': 'editPublisher',
-				'publishers/edit/:id': 'editPublisher'
+				'publishers/edit/:id': 'editPublisher',
+				'books' : 'booksList'
 			}
 		
 		});
@@ -144,9 +178,15 @@
 		});
 
 		router.on('route:editPublisher', function(id){
-			console.log('ok');
 			var editPublisher = new EditPublisher();
 			editPublisher.render({id: id});
+		});
+
+		router.on('route:booksList', function(){
+			var header = new BooksListHeader();
+			header.render();
+			var booksList = new BooksList();
+			booksList.render();
 		});
 
 		Backbone.history.start();

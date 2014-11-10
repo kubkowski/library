@@ -25,9 +25,9 @@ AuthorsItemView = Backbone.View.extend({
 	tagName: 'tr',
 	template: _.template($("#authors-list-item").html()),
 	render: function() {
-     this.$el.html(this.template(this.model.toJSON()));
-     return this;
-    }
+    this.$el.html(this.template(this.model.toJSON()));
+    return this;
+  }
 });	
 
 EditAuthor = Backbone.View.extend({
