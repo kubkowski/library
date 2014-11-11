@@ -38,9 +38,9 @@
 		<hr />
 		<form class="edit-author-form">
 			<legend><%= author ? 'Update' : 'Create' %> author:</legend>
-			<label>First name:</label>
+			<label>First name :</label>
 			<input type="text" name="first_name" value="<%= author ? author.get('first_name') : '' %>" />
-			<label>Last name:</label>
+			<label>Last name :</label>
 			<input type="text" name="last_name" value="<%= author ? author.get('last_name') : '' %>" />
 			<hr />
 			<button type="submit" class="btn"><%= author ? 'Update' : 'Create' %></button>
@@ -80,9 +80,9 @@
 		<hr />
 		<form class="edit-publisher-form">
 			<legend><%= publisher ? 'Update' : 'Create' %> publisher:</legend>
-			<label>Name</label>
+			<label>Name :</label>
 			<input type="text" name="name" value="<%= publisher ? publisher.get('name') : '' %>" />
-			<label>Established in:</label>
+			<label>Established in :</label>
 			<input type="text" name="established_year" value="<%= publisher ? publisher.get('established_year') : '' %>" />
 			<hr />
 			<button type="submit" class="btn"><%= publisher ? 'Update' : 'Create' %></button>
@@ -120,10 +120,32 @@
 		<td><%= htmlEncode(ISBN) %></td>
 		<td><%= htmlEncode(publisher.name) %></td>
 		<td><%= htmlEncode(published_year) %></td>
-		<td><a href="#/books/edit/<%= id %>" class="btn btn-primary">Edit Publisher</a></td>
+		<td><a href="#/books/edit/<%= id %>" class="btn btn-primary">Edit Book</a></td>
 	</script>
 
-		
+	<script id='edit-book' type='text/template'>
+		<h1>Books</h1>
+		<hr />
+		<form class="edit-book-form">
+			<legend><%= book ? 'Update' : 'Create' %> book:</legend>
+			<label>Title :</label>
+			<input type="text" name="title" value="<%= book ? book.get('title') : '' %>" />
+			<label>Author :</label>
+
+			<label>ISBN :</label>
+			<input type="text" name="ISBN" value="<%= book ? book.get('ISBN') : '' %>" />
+			<label>Publisher :</label>		
+
+			<label>Year :</label>
+
+			<hr />
+			<button type="submit" class="btn"><%= book ? 'Update' : 'Create' %></button>
+			<% if (book) { %>
+				<input type="hidden" name="id" value="<%= book.id %>" />
+				<button type= "button" class="btn btn-danger delete">Delete</button>
+			<% } %>
+		</form>
+	</script>	
 	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
@@ -151,7 +173,9 @@
 				'publishers' : 'publishersList',
 				'publishers/new': 'editPublisher',
 				'publishers/edit/:id': 'editPublisher',
-				'books' : 'booksList'
+				'books' : 'booksList',
+				'books/new' : 'editBook',
+				'books/edit/:id' : 'editBook'
 			}
 		
 		});
@@ -187,6 +211,11 @@
 			header.render();
 			var booksList = new BooksList();
 			booksList.render();
+		});
+
+		router.on('route:editBook', function(id){
+			var editBook = new EditBook();
+			editBook.render({id: id});
 		});
 
 		Backbone.history.start();

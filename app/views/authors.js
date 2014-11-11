@@ -61,11 +61,13 @@ EditAuthor = Backbone.View.extend({
 		return false;
 	},
 	deleteAuthor: function(ev){
-		this.author.destroy({
-			success: function(){
-				router.navigate('/authors', {trigger:true});
-			}
-		});
+		if (confirm('Are you sure you want to delete that author?')) {
+			this.author.destroy({
+				success: function(){
+					router.navigate('/authors', {trigger:true});
+				}
+			});
+		}
 		return false;
 	}
 });

@@ -61,11 +61,13 @@ EditPublisher = Backbone.View.extend({
 		return false;
 	},
 	deletePublisher: function(ev){
-		this.publisher.destroy({
-			success: function(){
-				router.navigate('/publishers', {trigger:true});
-			}
-		});
+		if (confirm('Are you sure you want to delete that publisher?')) {
+			this.publisher.destroy({
+				success: function(){
+					router.navigate('/publishers', {trigger:true});
+				}
+			});
+		}	
 		return false;
 	}
 });
