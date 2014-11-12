@@ -48,7 +48,8 @@ EditBook = Backbone.View.extend({
 	},
 	events: {
 		'submit .edit-book-form': 'saveBook',
-		'click .delete' : 'deleteBook'
+		'click .delete' : 'deleteBook',
+		'click .return' : 'returnToList'
 	},
 	saveBook: function(ev){
 		var bookDetails = $(ev.currentTarget).serializeObject();
@@ -68,6 +69,10 @@ EditBook = Backbone.View.extend({
 				}
 			});
 		};
+		return false;
+	},
+	returnToList: function(){
+		router.navigate('/books', {trigger:true});
 		return false;
 	}
 });

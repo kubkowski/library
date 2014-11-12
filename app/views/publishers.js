@@ -48,7 +48,8 @@ EditPublisher = Backbone.View.extend({
 	},
 	events: {
 		'submit .edit-publisher-form': 'savePublisher',
-		'click .delete' : 'deletePublisher'
+		'click .delete' : 'deletePublisher',
+		'click .return' : 'returnToList'
 	},
 	savePublisher: function(ev){
 		var publisherDetails = $(ev.currentTarget).serializeObject();
@@ -68,6 +69,10 @@ EditPublisher = Backbone.View.extend({
 				}
 			});
 		}	
+		return false;
+	},
+	returnToList: function(){
+		router.navigate('/publishers', {trigger:true});
 		return false;
 	}
 });

@@ -48,7 +48,8 @@ EditAuthor = Backbone.View.extend({
 	},
 	events: {
 		'submit .edit-author-form': 'saveAuthor',
-		'click .delete' : 'deleteAuthor'
+		'click .delete' : 'deleteAuthor',
+		'click .return' : 'returnToList'
 	},
 	saveAuthor: function(ev){
 		var authorDetails = $(ev.currentTarget).serializeObject();
@@ -68,6 +69,10 @@ EditAuthor = Backbone.View.extend({
 				}
 			});
 		}
+		return false;
+	},
+	returnToList: function(){
+		router.navigate('/authors', {trigger:true});
 		return false;
 	}
 });
