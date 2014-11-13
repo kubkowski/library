@@ -1,4 +1,5 @@
 Publishers = Backbone.Collection.extend({
 	url: '/publishers',
-	model: Publisher
+	model: Publisher,
+	comparator: 'name'
 })

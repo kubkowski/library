@@ -7,11 +7,13 @@
 </head>
 <body>
 
-	<ul class="nav nav-pills">
-  	<li role="presentation" id="authors" class="active"><a href="#/authors">Authors</a></li>
-  	<li role="presentation" id="books"><a href="#/books">Books</a></li>
-  	<li role="presentation" id="publishers"><a href="#/publishers">Publishers</a></li>
-	</ul>
+	<header>
+		<ul class="nav nav-pills">
+  		<li id="authors" class="active"><a href="#/authors">Authors</a></li>
+  		<li id="books"><a href="#/books">Books</a></li>
+  		<li id="publishers"><a href="#/publishers">Publishers</a></li>
+		</ul>
+	</header>
 	<div class="container"></div>
 
 
@@ -50,12 +52,12 @@
 			<label>Last name :</label>
 			<input type="text" name="last_name" value="<%= author ? author.get('last_name') : '' %>" />
 			<hr />
-			<button type="submit" class="btn"><%= author ? 'Update' : 'Create' %></button>
+			<button type="submit" class="btn btn-success"><%= author ? 'Update' : 'Create' %></button>
 			<% if (author) { %>
 				<input type="hidden" name="id" value="<%= author.id %>" />
 				<button type= "button" class="btn btn-danger delete">Delete</button>
 			<% } %>
-			<button type="button" class="btn btn-success return">Return to list</button>
+			<button type="button" class="btn return">Return to list</button>
 		</form>
 	</script>
 
@@ -80,7 +82,8 @@
 	<script id="publishers-list-item" type="text/template">
 		<td><%= htmlEncode(name) %></td>
 		<td><%= htmlEncode(established_year) %></td>
-		<td><a href="#/publishers/edit/<%= id %>" class="btn btn-primary">Edit Publisher</a></td>
+		<td><a href="#/publishers/edit/<%= id %>" class="btn btn-primary">Edit Publisher</a>
+		<a href="#/publishers/delete/<%= id %>" class="btn btn-danger">Delete Publisher</a></td>
 	</script>
 
 	<script id='edit-publisher' type='text/template'>
@@ -93,12 +96,12 @@
 			<label>Established in :</label>
 			<input type="text" name="established_year" value="<%= publisher ? publisher.get('established_year') : '' %>" />
 			<hr />
-			<button type="submit" class="btn"><%= publisher ? 'Update' : 'Create' %></button>
+			<button type="submit" class="btn btn-success"><%= publisher ? 'Update' : 'Create' %></button>
 			<% if (publisher) { %>
 				<input type="hidden" name="id" value="<%= publisher.id %>" />
 				<button type= "button" class="btn btn-danger delete">Delete</button>
 			<% } %>
-			<button type="button" class="btn btn-success return">Return to list</button>
+			<button type="button" class="btn return">Return to list</button>
 		</form>
 	</script>
 
@@ -129,7 +132,8 @@
 		<td><%= htmlEncode(ISBN) %></td>
 		<td><%= htmlEncode(publisher.name) %></td>
 		<td><%= htmlEncode(published_year) %></td>
-		<td><a href="#/books/edit/<%= id %>" class="btn btn-primary">Edit Book</a></td>
+		<td><a href="#/books/edit/<%= id %>" class="btn btn-primary">Edit Book</a>
+		<a href="#/books/delete/<%= id %>" class="btn btn-danger">Delete Book</a></td>
 	</script>
 
 	<script id='edit-book' type='text/template'>
@@ -148,12 +152,12 @@
 			<label>Year :</label>
 
 			<hr />
-			<button type="submit" class="btn"><%= book ? 'Update' : 'Create' %></button>
+			<button type="submit" class="btn btn-success"><%= book ? 'Update' : 'Create' %></button>
 			<% if (book) { %>
 				<input type="hidden" name="id" value="<%= book.id %>" />
 				<button type= "button" class="btn btn-danger delete">Delete</button>
 			<% } %>
-			<button type="button" class="btn btn-success return">Return to list</button>
+			<button type="button" class="btn return">Return to list</button>
 		</form>
 	</script>	
 	
@@ -184,9 +188,11 @@
 				'publishers' : 'publishersList',
 				'publishers/new': 'editPublisher',
 				'publishers/edit/:id': 'editPublisher',
+				'publishers/delete/:id' : 'deletePublisher',
 				'books' : 'booksList',
 				'books/new' : 'editBook',
-				'books/edit/:id' : 'editBook'
+				'books/edit/:id' : 'editBook',
+				'books/delete/:id' : 'deleteBooks'
 			}
 		
 		});
@@ -232,6 +238,17 @@
 			editPublisher.render({id: id});
 		});
 
+		router.on('route:deletePublisher', function(id){
+			var publisher = new Publisher({id: id});
+			if (confirm('Are you sure you want to delete that publisher?')) {
+				publisher.destroy({
+				success: function(){
+					router.navigate('/publishers', {trigger:true});
+				}
+			});
+			}
+		});
+
 		router.on('route:booksList', function(){
 			$('li').removeClass('active');
 			$('li#books').addClass('active');
@@ -244,6 +261,17 @@
 		router.on('route:editBook', function(id){
 			var editBook = new EditBook();
 			editBook.render({id: id});
+		});
+
+		router.on('route:deleteBook', function(id){
+			var book = new Book({id: id});
+			if (confirm('Are you sure you want to delete that book?')) {
+				book.destroy({
+				success: function(){
+					router.navigate('/books', {trigger:true});
+				}
+			});
+			}
 		});
 
 		Backbone.history.start();

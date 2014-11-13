@@ -1,4 +1,5 @@
 Books = Backbone.Collection.extend({
 	url: '/books',
-	model: Book
+	model: Book,
+	comparator: 'title'
 })
