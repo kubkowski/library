@@ -1,2 +1,8 @@
 #Ignore Bootstrap css
-css/*.min.css
+library/css/*.min.css
+
+#Ignore build packages
+build/*.js
+
+#Ignore node modules
+node_modules/

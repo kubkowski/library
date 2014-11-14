@@ -43,7 +43,7 @@ EditAuthor = Backbone.View.extend({
 				}
 			});
 		} else {
-			this.$el.html(this.template({author: null}));
+			this.$el.html(this.template({author: null}));	
 		}				
 	},
 	events: {
@@ -53,10 +53,13 @@ EditAuthor = Backbone.View.extend({
 	},
 	saveAuthor: function(ev){
 		var authorDetails = $(ev.currentTarget).serializeObject();
-		var author = new Author();
+		console.log(authorDetails);
+		var self = this;
+		author = new Author();
 		author.save(authorDetails, {
-		success: function(){
+			success: function(){
 				router.navigate('/authors', {trigger:true});
+				self.unbind();
 			}
 		});
 		return false;
