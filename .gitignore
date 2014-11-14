@@ -6,3 +6,6 @@ build/*.js
 
 #Ignore node modules
 node_modules/
+
+#Ignore grunt
+.grunt/
