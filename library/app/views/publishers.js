@@ -52,10 +52,12 @@ EditPublisher = Backbone.View.extend({
 		'click .return' : 'returnToList'
 	},
 	savePublisher: function(ev){
+		var self = this;
 		var publisherDetails = $(ev.currentTarget).serializeObject();
 		var publisher = new Publisher();
 		publisher.save(publisherDetails, {
 		success: function(){
+				self.undelegateEvents();
 				router.navigate('/publishers', {trigger:true});
 			}
 		});

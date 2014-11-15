@@ -33,7 +33,7 @@ AuthorsItemView = Backbone.View.extend({
 EditAuthor = Backbone.View.extend({
 	el: '.container',
 	template: _.template($('#edit-author').html()),
-	render: function(options){
+	render: function (options) {
 		var self = this;
 		if (options.id) {
 			self.author = new Author({id: options.id});
@@ -52,19 +52,18 @@ EditAuthor = Backbone.View.extend({
 		'click .return' : 'returnToList'
 	},
 	saveAuthor: function(ev){
-		var authorDetails = $(ev.currentTarget).serializeObject();
-		console.log(authorDetails);
 		var self = this;
-		author = new Author();
+		var authorDetails = $(ev.currentTarget).serializeObject();
+		var author = new Author();
 		author.save(authorDetails, {
-			success: function(){
+		success: function(){
+				self.undelegateEvents();
 				router.navigate('/authors', {trigger:true});
-				self.unbind();
 			}
 		});
 		return false;
 	},
-	deleteAuthor: function(ev){
+	deleteAuthor: function(ev){		
 		if (confirm('Are you sure you want to delete that author?')) {
 			this.author.destroy({
 				success: function(){
