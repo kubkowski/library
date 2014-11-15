@@ -11,11 +11,13 @@ PublishersList = Backbone.View.extend({
 	render: function(){
 		var self = this;
 		var publishers = new Publishers();
+		var allSubViews = document.createDocumentFragment();
 		publishers.fetch({
 			success: function(publishers){
 					_.each(publishers.models, function(publisher){
-						self.$el.append(new PublishersItemView({model: publisher}).render().el)
+						allSubViews.appendChild(new PublishersItemView({model: publisher}).render().el);
 					});
+					self.$el.append(allSubViews);
 			}
 		});				
 	}

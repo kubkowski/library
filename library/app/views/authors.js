@@ -11,11 +11,13 @@ AuthorsList = Backbone.View.extend({
 	render: function(){
 		var self = this;
 		var authors = new Authors();
+		var allSubViews = document.createDocumentFragment();
 		authors.fetch({
 			success: function(authors){
 					_.each(authors.models, function(author){
-						self.$el.append(new AuthorsItemView({model: author}).render().el)
+						allSubViews.appendChild(new AuthorsItemView({model: author}).render().el);
 					});
+					self.$el.append(allSubViews);
 			}
 		});				
 	}

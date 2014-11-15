@@ -11,11 +11,13 @@ BooksList = Backbone.View.extend({
   render: function () {
     var self = this;
     var books = new Books();
+    var allSubViews = document.createDocumentFragment();
     books.fetch({
       success: function (books) {
         _.each(books.models, function (book) {
-          self.$el.append(new BooksItemView({model: book}).render().el)
+          allSubViews.appendChild(new BooksItemView({model: book}).render().el);
         });
+        self.$el.append(allSubViews);
       }
     });
   }
