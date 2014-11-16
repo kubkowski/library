@@ -45,6 +45,8 @@
 	<script id='edit-author' type='text/template'>
 		<h1>Authors</h1>
 		<hr />
+		<div><ul id="errors"></ul></div>
+		<hr />
 		<form class="edit-author-form">
 			<legend><%= author ? 'Update' : 'Create' %> author:</legend>
 			<label>First name :</label>
@@ -163,7 +165,8 @@
 	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>	
+	<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.validation/0.9.1/backbone-validation.js"></script>	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="/app/models/author.js"></script>
 	<script src="/app/models/book.js"></script>

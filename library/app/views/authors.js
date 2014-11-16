@@ -39,6 +39,9 @@ EditAuthor = Backbone.View.extend({
 		var self = this;
 		if (options.id) {
 			self.author = new Author({id: options.id});
+			Backbone.Validation.bind(this, {
+      	model: self.author
+    	});
 			self.author.fetch({
 				success: function(author){
 					self.$el.html(self.template({author: author}));
@@ -55,14 +58,27 @@ EditAuthor = Backbone.View.extend({
 	},
 	saveAuthor: function(ev){
 		var self = this;
-		var authorDetails = $(ev.currentTarget).serializeObject();
-		var author = new Author();
-		author.save(authorDetails, {
-		success: function(){
-				self.undelegateEvents();
-				router.navigate('/authors', {trigger:true});
-			}
-		});
+		self.authorDetails = $(ev.currentTarget).serializeObject();
+		self.author = new Author();
+		Backbone.Validation.bind(this, {
+      model: self.author
+    });
+    var errors = self.author.preValidate(self.authorDetails);
+    if (errors) {
+    	var $errors = $('ul#errors');
+    	var msgs = _.values(errors);
+    	$errors.empty();
+    	_.each(msgs, function (msg) {
+    		$errors.append("<li>"+ msg + "</li>");
+    	});
+    } else {
+			self.author.save(self.authorDetails, {
+				success: function(){
+					self.undelegateEvents();
+					router.navigate('/authors', {trigger:true});
+				}
+			});
+		}
 		return false;
 	},
 	deleteAuthor: function(ev){		
