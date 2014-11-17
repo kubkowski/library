@@ -55,14 +55,27 @@ EditPublisher = Backbone.View.extend({
 	},
 	savePublisher: function(ev){
 		var self = this;
-		var publisherDetails = $(ev.currentTarget).serializeObject();
-		var publisher = new Publisher();
-		publisher.save(publisherDetails, {
-		success: function(){
-				self.undelegateEvents();
-				router.navigate('/publishers', {trigger:true});
-			}
-		});
+		self.publisherDetails = $(ev.currentTarget).serializeObject();
+		self.publisher = new Publisher();
+		Backbone.Validation.bind(this, {
+      model: self.publisher
+    });
+    var errors = self.publisher.preValidate(self.publisherDetails);
+    if (errors) {
+    	var $errors = $('ul#errors');
+    	var msgs = _.values(errors);
+    	$errors.empty();
+    	_.each(msgs, function (msg) {
+    		$errors.append("<li>"+ msg + "</li>");
+    	});
+    } else {
+			self.publisher.save(self.publisherDetails, {
+				success: function(){
+					self.undelegateEvents();
+					router.navigate('/publishers', {trigger:true});
+				}
+			});
+		}
 		return false;
 	},
 	deletePublisher: function(ev){

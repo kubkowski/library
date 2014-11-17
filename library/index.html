@@ -91,6 +91,8 @@
 	<script id='edit-publisher' type='text/template'>
 		<h1>Publishers</h1>
 		<hr />
+		<div><ul id="errors"></ul></div>
+		<hr />
 		<form class="edit-publisher-form">
 			<legend><%= publisher ? 'Update' : 'Create' %> publisher:</legend>
 			<label>Name :</label>
@@ -140,6 +142,8 @@
 
 	<script id='edit-book' type='text/template'>
 		<h1>Books</h1>
+		<hr />
+		<div><ul id="errors"></ul></div>
 		<hr />
 		<form class="edit-book-form">
 			<legend><%= book ? 'Update' : 'Create' %> book:</legend>
