@@ -150,13 +150,25 @@
 			<label>Title :</label>
 			<input type="text" name="title" value="<%= book ? book.get('title') : '' %>" />
 			<label>Author :</label>
-
+			<select id="author_id">
+				<% _.each(authors, function (author) { %>
+        	<option value="<%= author.get('id') %>"><%= htmlEncode(author.get('first_name') + " " + author.get('last_name')) %></option>
+      	<% }); %>					
+			</select>
 			<label>ISBN :</label>
 			<input type="text" name="ISBN" value="<%= book ? book.get('ISBN') : '' %>" />
 			<label>Publisher :</label>		
-
+				<select id="publisher_id">
+				<% _.each(publishers, function (publisher) { %>
+        	<option value="<%= publisher.get('id') %>"><%= htmlEncode(publisher.get('name')) %></option>
+      	<% }); %>					
+			</select>
 			<label>Year :</label>
-
+			<select id="published_year">
+				<% for (i = new Date().getFullYear() ; i > 1900; i--) {%>
+					<option value="<%= i %>"><%= i %></option>
+				<% } %>
+			</select>
 			<hr />
 			<button type="submit" class="btn btn-success"><%= book ? 'Update' : 'Create' %></button>
 			<% if (book) { %>
@@ -181,7 +193,7 @@
 	<script src="/app/helpers/applicationhelper.js"></script>
 	<script src="/app/views/authors.js"></script>
 	<script src="/app/views/books.js"></script>
-	<script src="/app/views/publishers.js"></script>
+	<script src="/app/views/publishers.js"></script>	
 
 	<script type="text/javascript">
 

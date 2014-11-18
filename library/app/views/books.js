@@ -32,21 +32,31 @@ BooksItemView = Backbone.View.extend({
   }
 });
 
+
 EditBook = Backbone.View.extend({
   el: '.container',
   template: _.template($('#edit-book').html()),
   render: function (options) {
     var self = this;
-    if (options.id) {
+    self.authors = new Authors();
+    self.publishers = new Publishers;
+    $.when( self.authors.fetch() , self.publishers.fetch() ).done(function () {  
+      if (options.id) {
       self.book = new Book({id: options.id});
       self.book.fetch({
         success: function (book) {
-          self.$el.html(self.template({book: book}));
+          self.$el.html(self.template({
+            book: book, 
+            authors: self.authors.models,
+            publishers: self.publishers.models
+          }));
         }
       });
-    } else {
-      this.$el.html(this.template({book: null}));
-    }
+      } else {
+        this.$el.html(this.template({book: null}));
+      }
+    });
+    
   },
   events: {
     'submit .edit-book-form': 'saveBook',
