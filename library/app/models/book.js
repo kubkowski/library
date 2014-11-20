@@ -1,16 +1,10 @@
 Book = Backbone.Model.extend({
 	urlRoot : '/books',
 	defaults: {
-		author: {
-			first_name: '',
-			last_name: ''
-		},
+		author_id: 0,
 		title: '',
 		ISBN: '0000000000000',
-		publisher: {
-			name: '',
-			established_year: 1900
-		},
+		publisher_id: 0,
 		published_year : 1900
 	}
 })

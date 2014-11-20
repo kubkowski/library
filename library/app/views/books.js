@@ -27,7 +27,17 @@ BooksItemView = Backbone.View.extend({
   tagName: 'tr',
   template: _.template($("#books-list-item").html()),
   render: function () {
-    this.$el.html(this.template(this.model.toJSON()));
+    var self = this;
+    self.book = this.model;
+    self.author = new Author({id: this.model.attributes.author_id});
+    self.publisher = new Publisher({id: this.model.attributes.publisher_id});
+    $.when(self.author.fetch() , self.publisher.fetch() ).done(function () {
+      self.$el.html(self.template({
+        author: self.author.attributes,
+        book: self.book.attributes,
+        publisher: self.publisher.attributes
+      }));
+    });
     return this;
   }
 });
@@ -39,21 +49,32 @@ EditBook = Backbone.View.extend({
   render: function (options) {
     var self = this;
     self.authors = new Authors();
-    self.publishers = new Publishers;
+    self.publishers = new Publishers();
     $.when( self.authors.fetch() , self.publishers.fetch() ).done(function () {  
       if (options.id) {
       self.book = new Book({id: options.id});
       self.book.fetch({
         success: function (book) {
-          self.$el.html(self.template({
-            book: book, 
-            authors: self.authors.models,
-            publishers: self.publishers.models
-          }));
+          self.book = book;
+          self.bookAuthor = new Author({id: self.book.attributes.author_id});
+          self.bookPublisher = new Publisher({id: self.book.attributes.publisher_id});
+          $.when( self.bookAuthor.fetch() , self.bookPublisher.fetch() ).done(function() {
+            self.$el.html(self.template({
+              book: self.book.attributes,
+              authors: self.authors.models,
+              publishers: self.publishers.models,
+              author: self.bookAuthor.attributes,
+              publisher: self.bookPublisher.attributes
+            }));
+          });         
         }
       });
       } else {
-        this.$el.html(this.template({book: null}));
+        self.$el.html(self.template({
+          book: null,
+          authors: self.authors.models,
+          publishers: self.publishers.models
+        }));
       }
     });
     
@@ -65,10 +86,10 @@ EditBook = Backbone.View.extend({
   },
   saveBook: function (ev) {
     var self = this;
-    var bookDetails = $(ev.currentTarget).serializeObject();
-    var book = new Book();
-    book.save(bookDetails, {
-    success: function () {
+    self.bookDetails = $(ev.currentTarget).serializeObject();
+    self.book = new Book({id: self.bookDetails.id});
+    self.book.save(self.bookDetails, {
+      success: function () {
         self.undelegateEvents();
         router.navigate('/books', {trigger: true});
       }

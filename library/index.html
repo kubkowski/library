@@ -132,12 +132,12 @@
 
 	<script id="books-list-item" type="text/template">
 		<td><%= htmlEncode(author.first_name + " " + author.last_name) %></td>
-		<td><%= htmlEncode(title) %></td>
-		<td><%= htmlEncode(ISBN) %></td>
+		<td><%= htmlEncode(book.title) %></td>
+		<td><%= htmlEncode(book.ISBN) %></td>
 		<td><%= htmlEncode(publisher.name) %></td>
-		<td><%= htmlEncode(published_year) %></td>
-		<td><a href="#/books/edit/<%= id %>" class="btn btn-primary">Edit Book</a>
-		<a href="#/books/delete/<%= id %>" class="btn btn-danger">Delete Book</a></td>
+		<td><%= htmlEncode(book.published_year) %></td>
+		<td><a href="#/books/edit/<%= book.id %>" class="btn btn-primary">Edit Book</a>
+		<a href="#/books/delete/<%= book.id %>" class="btn btn-danger">Delete Book</a></td>
 	</script>
 
 	<script id='edit-book' type='text/template'>
@@ -148,29 +148,29 @@
 		<form class="edit-book-form">
 			<legend><%= book ? 'Update' : 'Create' %> book:</legend>
 			<label>Title :</label>
-			<input type="text" name="title" value="<%= book ? book.get('title') : '' %>" />
+			<input type="text" name="title" value="<%= book ? book.title : '' %>" />
 			<label>Author :</label>
-			<select id="author_id">
+			<select id="author_id" name="author_id">
 				<% _.each(authors, function (author) { %>
-        	<option value="<%= author.get('id') %>" <%= (book.get('author').id === author.get('id')) ? 'selected' : ''%>>
+        	<option value="<%= author.get('id') %>" <%= (book && (book.author_id === author.get('id'))) ? 'selected' : ''%>>
         		<%= htmlEncode(author.get('first_name') + " " + author.get('last_name')) %>
         	</option>
       	<% }); %>					
 			</select>
 			<label>ISBN :</label>
-			<input type="text" name="ISBN" value="<%= book ? book.get('ISBN') : '' %>" />
+			<input type="text" name="ISBN" value="<%= book ? book.ISBN : '' %>" />
 			<label>Publisher :</label>		
-				<select id="publisher_id">
+				<select id="publisher_id" name="publisher_id">
 				<% _.each(publishers, function (publisher) { %>	
-        	<option value="<%= publisher.get('id') %>"<%= (book.get('publisher').id === publisher.get('id')) ? 'selected' : ''%>>
+        	<option value="<%= publisher.get('id') %>"<%= (book && (book.publisher_id === publisher.get('id'))) ? 'selected' : ''%>>
         		<%= htmlEncode(publisher.get('name')) %>
         	</option>
       	<% }); %>					
 			</select>
 			<label>Year :</label>
-			<select id="published_year">
+			<select id="published_year" name="published_year">
 				<% for (i = new Date().getFullYear() ; i > 1800; i--) {%>
-					<option value="<%= i %>" <%= (book.get('published_year') === i) ? 'selected' : ''%>>
+					<option value="<%= i %>" <%= (book && (book.published_year === i)) ? 'selected' : ''%>>
 						<%= i %>
 					</option>
 				<% } %>
@@ -217,7 +217,7 @@
 				'books' : 'booksList',
 				'books/new' : 'editBook',
 				'books/edit/:id' : 'editBook',
-				'books/delete/:id' : 'deleteBooks'
+				'books/delete/:id' : 'deleteBook'
 			}
 		
 		});
