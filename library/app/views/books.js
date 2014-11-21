@@ -31,7 +31,7 @@ BooksItemView = Backbone.View.extend({
     self.book = this.model;
     self.author = new Author({id: this.model.attributes.author_id});
     self.publisher = new Publisher({id: this.model.attributes.publisher_id});
-    $.when(self.author.fetch() , self.publisher.fetch() ).done(function () {
+    $.when( self.author.fetch() , self.publisher.fetch() ).done(function () {
       self.$el.html(self.template({
         author: self.author.attributes,
         book: self.book.attributes,
@@ -90,6 +90,7 @@ EditBook = Backbone.View.extend({
     self.book = new Book({id: self.bookDetails.id});
     self.book.save(self.bookDetails, {
       success: function () {
+        alert("Dane zapisano");
         self.undelegateEvents();
         router.navigate('/books', {trigger: true});
       }
@@ -97,9 +98,11 @@ EditBook = Backbone.View.extend({
     return false;
   },
   deleteBook: function () {
+    var self = this;
     if (confirm('Are you sure you want to delete that book?')) {
       this.book.destroy({
         success: function () {
+          self.undelegateEvents();
           router.navigate('/books', {trigger: true});
         }
       });
@@ -107,6 +110,7 @@ EditBook = Backbone.View.extend({
     return false;
   },
   returnToList: function () {
+    this.undelegateEvents();
     router.navigate('/books', {trigger: true});
     return false;
   }

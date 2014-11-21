@@ -74,6 +74,7 @@ EditAuthor = Backbone.View.extend({
     } else {
 			self.author.save(self.authorDetails, {
 				success: function(){
+					alert("Dane zapisano");
 					self.undelegateEvents();
 					router.navigate('/authors', {trigger:true});
 				}
@@ -82,9 +83,11 @@ EditAuthor = Backbone.View.extend({
 		return false;
 	},
 	deleteAuthor: function(ev){		
+		var self = this;
 		if (confirm('Are you sure you want to delete that author?')) {
 			this.author.destroy({
 				success: function(){
+					self.undelegateEvents();
 					router.navigate('/authors', {trigger:true});
 				}
 			});
@@ -92,6 +95,7 @@ EditAuthor = Backbone.View.extend({
 		return false;
 	},
 	returnToList: function(){
+		this.undelegateEvents();
 		router.navigate('/authors', {trigger:true});
 		return false;
 	}

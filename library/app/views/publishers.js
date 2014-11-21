@@ -71,6 +71,7 @@ EditPublisher = Backbone.View.extend({
     } else {
 			self.publisher.save(self.publisherDetails, {
 				success: function(){
+					alert("Dane zapisano");
 					self.undelegateEvents();
 					router.navigate('/publishers', {trigger:true});
 				}
@@ -79,9 +80,11 @@ EditPublisher = Backbone.View.extend({
 		return false;
 	},
 	deletePublisher: function(ev){
+		var self = this;
 		if (confirm('Are you sure you want to delete that publisher?')) {
 			this.publisher.destroy({
 				success: function(){
+					self.undelegateEvents();
 					router.navigate('/publishers', {trigger:true});
 				}
 			});
@@ -89,6 +92,7 @@ EditPublisher = Backbone.View.extend({
 		return false;
 	},
 	returnToList: function(){
+		this.undelegateEvents();
 		router.navigate('/publishers', {trigger:true});
 		return false;
 	}
