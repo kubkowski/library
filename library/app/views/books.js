@@ -88,13 +88,26 @@ EditBook = Backbone.View.extend({
     var self = this;
     self.bookDetails = $(ev.currentTarget).serializeObject();
     self.book = new Book({id: self.bookDetails.id});
-    self.book.save(self.bookDetails, {
-      success: function () {
-        alert("Dane zapisano");
-        self.undelegateEvents();
-        router.navigate('/books', {trigger: true});
-      }
+    Backbone.Validation.bind(this, {
+      model: self.book
     });
+    var errors = self.book.preValidate(self.bookDetails);
+    if (errors){
+      var $errors = $('ul#errors');
+      var msgs = _.values(errors);
+      $errors.empty();
+      _.each(msgs, function (msg) {
+        $errors.append("<li>"+ msg + "</li>");
+      });
+    } else {
+      self.book.save(self.bookDetails, {
+        success: function () {
+          alert("Dane zapisano");
+          self.undelegateEvents();
+          router.navigate('/books', {trigger: true});
+        }
+      });
+    }
     return false;
   },
   deleteBook: function () {
