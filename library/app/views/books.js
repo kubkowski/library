@@ -91,6 +91,7 @@ EditBook = Backbone.View.extend({
     Backbone.Validation.bind(this, {
       model: self.book
     });
+    self.bookDetails.ISBN = self.bookDetails.ISBN.replace('-','');
     var errors = self.book.preValidate(self.bookDetails);
     if (errors){
       var $errors = $('ul#errors');

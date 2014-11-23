@@ -24,13 +24,18 @@ Book = Backbone.Model.extend({
       required: true,
       msg: "Select year of publishing"
     },
-    ISBN: {
-      fn: 'validateISBN'
-    }
+    ISBN: [{
+      pattern: 'number',
+      msg: "Please enter valid ISBN number"
+    },
+    {
+      required: true,
+      msg: "Please enter ISBN number"
+    },
+    {
+      length: 13,
+      msg: "Incorrect ISBN number length (it should have 13 digits)"
+    }] 
   },
-  validateISBN: function(value, attr, computedState) {
-    /* if(value !== 'something') {
-      return 'ISBN is invalid';
-    } */
-  }
+
 })
