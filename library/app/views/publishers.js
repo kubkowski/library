@@ -81,15 +81,32 @@ EditPublisher = Backbone.View.extend({
 	},
 	deletePublisher: function(ev){
 		var self = this;
-		if (confirm('Are you sure you want to delete that publisher?')) {
-			this.publisher.destroy({
-				success: function(){
-					self.undelegateEvents();
-					router.navigate('/publishers', {trigger:true});
-				}
-			});
-		}	
-		return false;
+  	var $errors = $('ul#errors');
+  	self.books = new Books();
+  	self.books.fetch({
+    	success: function () {
+      	var msg = "There are still books connected to this publisher (please delete them first)";
+      	var bookCount = 0;
+      	_.each(self.books.models, function(book) {
+        	if (String(book.attributes.publisher_id) === String(self.publisher.id)) {             
+          	bookCount += 1;
+        	}
+      	});
+      	if (bookCount > 0) {
+        	$errors.empty();
+        	$errors.append("<li>"+ msg + "</li>");
+      	} 
+      	else {
+        	if (confirm('Are you sure you want to delete that publisher?')) {
+          	self.publisher.destroy({
+            	success: function(){
+              	router.navigate('/publishers', {trigger:true});
+            	}
+          	});
+        	}
+      	}       
+    	}
+  	});
 	},
 	returnToList: function(){
 		this.undelegateEvents();

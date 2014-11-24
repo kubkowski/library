@@ -84,15 +84,33 @@ EditAuthor = Backbone.View.extend({
 	},
 	deleteAuthor: function(ev){		
 		var self = this;
-		if (confirm('Are you sure you want to delete that author?')) {
-			this.author.destroy({
-				success: function(){
-					self.undelegateEvents();
-					router.navigate('/authors', {trigger:true});
-				}
-			});
-		}
-		return false;
+  	var $errors = $('ul#errors');
+  	self.books = new Books();
+  	self.books.fetch({
+    	success: function () {
+      	var msg = "There are still books connected to this author (please delete them first)";
+      	var bookCount = 0;
+      	_.each(self.books.models, function(book) {
+        	if (String(book.attributes.author_id) === String(self.author.id)) {
+          	bookCount += 1;
+        	}
+      	});
+      	if (bookCount > 0) {
+        	$errors.empty();            
+        	$errors.append("<li>"+ msg + "</li>");
+      	} 
+      	else {
+        	if (confirm('Are you sure you want to delete that author?')) {
+          	self.author.destroy({
+            	success: function(){
+            		self.undelegateEvents();
+              	router.navigate('/authors', {trigger:true});
+            	}
+          	});
+        	}
+      	}       
+    	}
+  	});
 	},
 	returnToList: function(){
 		this.undelegateEvents();
