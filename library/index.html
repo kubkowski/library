@@ -19,6 +19,9 @@
 
 	<script id="authors-list" type="text/template">
 		<h1>Authors</h1>
+		<hr />
+		<div><ul id="errors"></ul></div>
+		<hr />
 		<a href="#/authors/new" class="btn btn-primary">New author</a>
 		<hr />
 		<table class="table striped">
@@ -65,6 +68,9 @@
 
 	<script id="publishers-list" type="text/template">
 		<h1>Publishers</h1>
+		<hr />
+		<div><ul id="errors"></ul></div>
+		<hr />
 		<a href="#/publishers/new" class="btn btn-primary">New publisher</a>
 		<hr />
 		<table class="table striped">
@@ -199,105 +205,10 @@
 	<script src="/app/helpers/applicationhelper.js"></script>
 	<script src="/app/views/authors.js"></script>
 	<script src="/app/views/books.js"></script>
-	<script src="/app/views/publishers.js"></script>	
+	<script src="/app/views/publishers.js"></script>
+	<script src="/app/routers/router.js"></script>
 
 	<script type="text/javascript">
-
-		Router = Backbone.Router.extend({
-			routes: {
-				'': 'authorsList',
-				'authors': 'authorsList',
-				'authors/new': 'editAuthor',
-				'authors/edit/:id': 'editAuthor',
-				'authors/delete/:id' : 'deleteAuthor',
-				'publishers' : 'publishersList',
-				'publishers/new': 'editPublisher',
-				'publishers/edit/:id': 'editPublisher',
-				'publishers/delete/:id' : 'deletePublisher',
-				'books' : 'booksList',
-				'books/new' : 'editBook',
-				'books/edit/:id' : 'editBook',
-				'books/delete/:id' : 'deleteBook'
-			}
-		
-		});
-
-		var router = new Router();
-
-		router.on('route:authorsList', function(){			
-			$('li').removeClass('active');
-			$('li#authors').addClass('active');
-			var header = new AuthorsListHeader();
-			header.render();
-			var authorsList = new AuthorsList();
-			authorsList.render();
-		});
-
-		router.on('route:editAuthor', function(id){
-			var editAuthor = new EditAuthor();
-			editAuthor.render({id: id});
-		});
-
-		router.on('route:deleteAuthor', function(id){
-			var author = new Author({id: id});
-			if (confirm('Are you sure you want to delete that author?')) {
-				author.destroy({
-				success: function(){
-					router.navigate('/authors', {trigger:true});
-				}
-			});
-			}
-		});
-
-		router.on('route:publishersList', function(){
-			$('li').removeClass('active');
-			$('li#publishers').addClass('active');
-			var header = new PublishersListHeader();
-			header.render();
-			var publishersList = new PublishersList();
-			publishersList.render();
-		});
-
-		router.on('route:editPublisher', function(id){
-			var editPublisher = new EditPublisher();
-			editPublisher.render({id: id});
-		});
-
-		router.on('route:deletePublisher', function(id){
-			var publisher = new Publisher({id: id});
-			if (confirm('Are you sure you want to delete that publisher?')) {
-				publisher.destroy({
-				success: function(){
-					router.navigate('/publishers', {trigger:true});
-				}
-			});
-			}
-		});
-
-		router.on('route:booksList', function(){
-			$('li').removeClass('active');
-			$('li#books').addClass('active');
-			var header = new BooksListHeader();
-			header.render();
-			var booksList = new BooksList();
-			booksList.render();
-		});
-
-		router.on('route:editBook', function(id){
-			var editBook = new EditBook();
-			editBook.render({id: id});
-		});
-
-		router.on('route:deleteBook', function(id){
-			var book = new Book({id: id});
-			if (confirm('Are you sure you want to delete that book?')) {
-				book.destroy({
-				success: function(){
-					router.navigate('/books', {trigger:true});
-				}
-			});
-			}
-		});
 
 		Backbone.history.start();
 
