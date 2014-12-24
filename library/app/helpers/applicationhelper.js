@@ -23,7 +23,7 @@ $.fn.serializeObject = function () {
   });
   return o;
 };
-		
+
 //Ajax Prefilter
 $.ajaxPrefilter( function ( options, originalOptions, jqXHR ) {
   options.url = 'https://safe-dusk-6297.herokuapp.com/api' + options.url;

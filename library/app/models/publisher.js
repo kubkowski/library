@@ -13,13 +13,13 @@ Publisher = Backbone.Model.extend({
       msg: 'Enter publisher name'
     },
     established_year: [{
-      required: true,
-      msg: 'Enter establishing year'
-    },
-    {
-      pattern: 'number',
-      msg: 'Year must be a number'
-    }]
+        required: true,
+        msg: 'Enter establishing year'
+      },
+      {
+        pattern: 'number',
+        msg: 'Year must be a number'
+      }]
   }
 
 })

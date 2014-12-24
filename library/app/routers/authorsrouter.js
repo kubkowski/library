@@ -1,5 +1,5 @@
 AuthorsRouter = Backbone.Router.extend({
-  
+
   routes: {
     '': 'authorsList',
     'authors': 'authorsList',
@@ -24,7 +24,7 @@ AuthorsRouter = Backbone.Router.extend({
 
   deleteAuthor: function ( id ) {
     var self = this;
-    var $errors = $('ul#errors');
+    var $errors = $('#errors');
     self.id = id;
     self.author = new Author({id: id});
     self.books = new Books();
