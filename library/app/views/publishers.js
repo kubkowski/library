@@ -1,12 +1,17 @@
 PublishersListHeader = Backbone.View.extend({
-	el: '.container',
-	template: _.template($("#publishers-list").html()),
-	render:function(){
-		this.$el.html(this.template);
-	}
+
+  el: '.container',
+
+  template: _.template($("#publishers-list").html()),
+
+  render: function () {
+    this.$el.html(this.template);
+  }
+
 });
 
 PublishersList = Backbone.View.extend({
+
 	el: '.page',
 	render: function(){
 		var self = this;
@@ -21,18 +26,22 @@ PublishersList = Backbone.View.extend({
 			}
 		});				
 	}
+
 });
 
 PublishersItemView = Backbone.View.extend({
+
 	tagName: 'tr',
 	template: _.template($("#publishers-list-item").html()),
 	render: function() {
     this.$el.html(this.template(this.model.toJSON()));
     return this;
   }
+
 });
 
 EditPublisher = Backbone.View.extend({
+
 	el: '.container',
 	template: _.template($('#edit-publisher').html()),
 	render: function(options){
@@ -113,4 +122,5 @@ EditPublisher = Backbone.View.extend({
 		router.navigate('/publishers', {trigger:true});
 		return false;
 	}
+
 });
