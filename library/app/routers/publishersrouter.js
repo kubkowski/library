@@ -1,4 +1,4 @@
-PublishersRouter = Backbone.router.extend({
+PublishersRouter = Backbone.Router.extend({
 
   routes: {
     'publishers' : 'publishersList',

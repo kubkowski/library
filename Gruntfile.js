@@ -4,10 +4,24 @@ module.exports = function(grunt) {
   grunt.initConfig({
     jasmine : {
       library: {
-        src: 'library/app/**/*.js',
+        src: [
+          'library/app/models/*.js',
+          'library/app/collections/*.js',
+          'library/app/helpers/*.js',
+          'library/app/routers/*.js',
+          'library/app/views/*.js',
+          'library/app/main.js'
+        ],
         options: {
           specs: 'test/spec/**/*.js',
-          helpers: 'test/helpers/**/*.js'
+          helpers: 'test/helpers/**/*.js',
+          vendor: [
+            'vendor/underscore-min.js',
+            'vendor/jquery-2.1.3.min.js',
+            'vendor/backbone-min.js',
+            'vendor/backbone-validation-min.js',
+            'vendor/bootstrap.min.js'
+          ],
         }
       }
     },
