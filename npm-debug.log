@@ -1,0 +1,87 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node',
+1 verbose cli   '/usr/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'karma-firefox-coverage' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.33
+4 verbose node symlink /usr/bin/node
+5 verbose cache add [ 'karma-firefox-coverage', null ]
+6 verbose cache add name=undefined spec="karma-firefox-coverage" args=["karma-firefox-coverage",null]
+7 verbose parsed url { protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: 'karma-firefox-coverage',
+7 verbose parsed url   path: 'karma-firefox-coverage',
+7 verbose parsed url   href: 'karma-firefox-coverage' }
+8 silly lockFile 2cb665f5-karma-firefox-coverage karma-firefox-coverage
+9 verbose lock karma-firefox-coverage /home/kubkowski/.npm/2cb665f5-karma-firefox-coverage.lock
+10 silly lockFile 2cb665f5-karma-firefox-coverage karma-firefox-coverage
+11 silly lockFile 2cb665f5-karma-firefox-coverage karma-firefox-coverage
+12 verbose addNamed [ 'karma-firefox-coverage', '' ]
+13 verbose addNamed [ null, '*' ]
+14 silly lockFile 53128478-karma-firefox-coverage karma-firefox-coverage@
+15 verbose lock karma-firefox-coverage@ /home/kubkowski/.npm/53128478-karma-firefox-coverage.lock
+16 silly addNameRange { name: 'karma-firefox-coverage', range: '*', hasData: false }
+17 verbose request where is /karma-firefox-coverage
+18 verbose request registry https://registry.npmjs.org/
+19 verbose request id ea712e1d2dd9341a
+20 verbose url raw /karma-firefox-coverage
+21 verbose url resolving [ 'https://registry.npmjs.org/', './karma-firefox-coverage' ]
+22 verbose url resolved https://registry.npmjs.org/karma-firefox-coverage
+23 verbose request where is https://registry.npmjs.org/karma-firefox-coverage
+24 info trying registry request attempt 1 at 12:56:44
+25 http GET https://registry.npmjs.org/karma-firefox-coverage
+26 http 404 https://registry.npmjs.org/karma-firefox-coverage
+27 verbose headers { date: 'Sun, 28 Dec 2014 11:56:48 GMT',
+27 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+27 verbose headers   'content-type': 'application/json',
+27 verbose headers   'cache-control': 'max-age=0',
+27 verbose headers   'content-length': '52',
+27 verbose headers   'accept-ranges': 'bytes',
+27 verbose headers   via: '1.1 varnish',
+27 verbose headers   age: '0',
+27 verbose headers   'x-served-by': 'cache-fra1238-FRA',
+27 verbose headers   'x-cache': 'MISS',
+27 verbose headers   'x-cache-hits': '0',
+27 verbose headers   'x-timer': 'S1419767807.985227,VS0,VE692',
+27 verbose headers   'keep-alive': 'timeout=10, max=50',
+27 verbose headers   connection: 'Keep-Alive' }
+28 silly registry.get cb [ 404,
+28 silly registry.get   { date: 'Sun, 28 Dec 2014 11:56:48 GMT',
+28 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+28 silly registry.get     'content-type': 'application/json',
+28 silly registry.get     'cache-control': 'max-age=0',
+28 silly registry.get     'content-length': '52',
+28 silly registry.get     'accept-ranges': 'bytes',
+28 silly registry.get     via: '1.1 varnish',
+28 silly registry.get     age: '0',
+28 silly registry.get     'x-served-by': 'cache-fra1238-FRA',
+28 silly registry.get     'x-cache': 'MISS',
+28 silly registry.get     'x-cache-hits': '0',
+28 silly registry.get     'x-timer': 'S1419767807.985227,VS0,VE692',
+28 silly registry.get     'keep-alive': 'timeout=10, max=50',
+28 silly registry.get     connection: 'Keep-Alive' } ]
+29 silly lockFile 53128478-karma-firefox-coverage karma-firefox-coverage@
+30 silly lockFile 53128478-karma-firefox-coverage karma-firefox-coverage@
+31 error 404 404 Not Found: karma-firefox-coverage
+31 error 404
+31 error 404 'karma-firefox-coverage' is not in the npm registry.
+31 error 404 You should bug the author to publish it
+31 error 404
+31 error 404 Note that you can also install from a
+31 error 404 tarball, folder, or http url, or git url.
+32 error System Linux 3.13.0-43-generic
+33 error command "/usr/bin/node" "/usr/bin/npm" "install" "-g" "karma-firefox-coverage"
+34 error cwd /var/www/workspace/library
+35 error node -v v0.10.33
+36 error npm -v 1.4.28
+37 error code E404
+38 verbose exit [ 1, true ]
